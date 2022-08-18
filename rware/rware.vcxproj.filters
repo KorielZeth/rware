@@ -21,10 +21,7 @@
     <ClCompile Include="encrypt.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="keygen.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="keyimport.cpp">
+    <ClCompile Include="crypto.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

