@@ -79,19 +79,17 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
 
 		}
-
-		//CloseHandle(hSourceFile);
-		//CloseHandle(hDestFile);
-
-		/*if (DeleteFile(szOGFileName) == 0) {
-			DWORD d = GetLastError();
-			std::cout << "Error deleting the OG file, error code 0x:" << d << std::endl;
-			break;
-
-		}*/
-
-
 	}
+
+	if (DeleteFile(szOGFileName) == 0) {
+		DWORD d = GetLastError();
+		std::cout << "Error deleting the OG file, error code 0x:" << d << std::endl;
+		return -1;
+
+}
+
+	CloseHandle(hSourceFile);
+	CloseHandle(hDestFile);
 
 	return 0;
 }
