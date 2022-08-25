@@ -17,7 +17,7 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
 
 	DWORD eof = 0;
-	PBYTE pbBuffer[120];
+	PBYTE pbBuffer[960];
 	DWORD dwBlockLen = 960;
 	DWORD dwBufferLen = 960;
 	DWORD dwCount = 0;
