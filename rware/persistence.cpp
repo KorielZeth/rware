@@ -3,7 +3,7 @@
 #include <ShlObj.h>
 #include <iostream>
 
-int checkForRegkey() {
+/*int checkForRegkey() {
 
 	HKEY cléRegistre;
 	if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_READ, &cléRegistre) == ERROR_SUCCESS) {
@@ -31,7 +31,7 @@ int checkForRegkey() {
 		RegCloseKey(cléRegistre);
 		return -1;
 	};
-}
+}*/
 
 
 /*int setRegkey() {

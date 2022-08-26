@@ -24,28 +24,20 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
 
 	hSourceFile = CreateFileW(szOGFileName, FILE_READ_DATA, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hSourceFile != INVALID_HANDLE_VALUE) {
+	if (hSourceFile == INVALID_HANDLE_VALUE) {
 
-		std::cout << "The sourcefile is open" << std::endl;
-	}
-	else {
 		DWORD d = GetLastError();
 		std::cout << "Error opening handle to the sourcefile, error code: " << d << std::endl;
 		return -1;
-
 	}
 
 
 	hDestFile = CreateFileW(pzDestFile, FILE_WRITE_DATA | DELETE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (INVALID_HANDLE_VALUE != hDestFile) {
+	if (INVALID_HANDLE_VALUE == hDestFile) {
 
-		std::cout << "The destfile is open" << std::endl;
-	}
-	else {
 		DWORD d = GetLastError();
 		std::cout << "Error opening handle to the destfile, error code 0x8" << d << std::endl;
 		return -1;
-
 	}
 
 	while (eof == 0) {
@@ -56,7 +48,6 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 			break;
 
 		}
-
 		
 		if (dwCount < dwBlockLen) {
 
@@ -81,15 +72,15 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 		}
 	}
 
+	CloseHandle(hSourceFile);
+	CloseHandle(hDestFile);
+
 	if (DeleteFile(szOGFileName) == 0) {
 		DWORD d = GetLastError();
 		std::cout << "Error deleting the OG file, error code 0x:" << d << std::endl;
 		return -1;
 
 }
-
-	CloseHandle(hSourceFile);
-	CloseHandle(hDestFile);
 
 	return 0;
 }
