@@ -3,6 +3,8 @@
 #include <ShlObj.h>
 #include <iostream>
 
+//finish this one day lmao
+
 /*int checkForRegkey() {
 
 	HKEY cléRegistre;
