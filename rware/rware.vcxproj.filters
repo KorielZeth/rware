@@ -21,14 +21,16 @@
     <ClCompile Include="encrypt.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="crypto.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="persistence.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ransom_wallpaper.cpp">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="persistence.h">
       <Filter>Fichiers sources</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="encrypt.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
