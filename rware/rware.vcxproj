@@ -141,10 +141,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="encrypt.cpp" />
-    <ClCompile Include="crypto.cpp" />
     <ClCompile Include="persistence.cpp" />
-    <ClCompile Include="ransom_wallpaper.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="encrypt.h" />
+    <ClInclude Include="persistence.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
