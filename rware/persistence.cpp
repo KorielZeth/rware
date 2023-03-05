@@ -11,9 +11,9 @@ int checkForRegkey() {
 		}
 		else
 		{
-			//DWORD d;
-			//d = GetLastError();
-			//std::cout << "Failure to check the key, error code 0x" << d << std::endl;
+			DWORD d;
+			d = GetLastError();
+			std::cout << "Failure to check the key, error code 0x" << d << std::endl;
 			RegCloseKey(cléRegistre);
 			return -1;
 		}
@@ -21,9 +21,9 @@ int checkForRegkey() {
 
 	}
 	else {
-		//DWORD d;
-		//d = GetLastError();
-		//std::cout << "Failure to open handle to the regkey, error code 0x" << d << std::endl;
+		DWORD d;
+		d = GetLastError();
+		std::cout << "Failure to open handle to the regkey, error code 0x" << d << std::endl;
 		RegCloseKey(cléRegistre);
 		return -1;
 	};
@@ -36,13 +36,13 @@ int setRegkey() {
 	LPCWSTR path = L"C:\\Windows\\Temp\\placeholder";
 	if (RegSetKeyValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", L"rware", REG_SZ, LPBYTE(&path), sizeof(path)) == ERROR_SUCCESS) {
 
-		//std::cout << "Key created" << std::endl;
+		std::cout << "Key created" << std::endl;
 		return 0;
 	}
 	else {
-		//DWORD d;
-		//d = GetLastError();
-		//std::cout << "Failure to create the regkey, error code 0x" << d << std::endl;
+		DWORD d;
+		d = GetLastError();
+		std::cout << "Failure to create the regkey, error code 0x" << d << std::endl;
 		return -1;
 
 	}
